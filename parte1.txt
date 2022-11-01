@@ -1,0 +1,4 @@
+addi t0,x0,0x38 # t0 = 0 + 0.38
+addi t1,x0,0x46 #t1 = 0 + 0.46
+# Adicionar seu código
+# resultado estará em t2
