@@ -5,6 +5,10 @@ srli t3, t0, 4 # t3 = expoente do 1º numero
 srli t4, t1, 4 # t4 = expoente do 2º numero
 andi t5, t0, 0b1111 # t5 = mantissa do 1º numero
 andi t6, t1, 0b1111 # t6 = mantissa do 2º numero
+add t0, t3, t4 # t0 recebe a soma dos expoentes
+addi t0, t0, -3 # subtraindo 3 de t0 para saber o exponete final
 ori t5, t5, 0x10 # ligando bit implícito do 1º numero
 ori t6, t6, 0x10 # ligando bit implícito do 2º numero
+mul t2, t5, t6 # multiplicação dos bits das mantissas em t5 e t6 // t2 = t5 x t6 = 11000 x 10110 = 10 0001 0000 // em hex = 210  
+# resultado estará em t2
 # resultado estará em t2
