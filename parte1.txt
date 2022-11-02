@@ -1,5 +1,5 @@
-addi t0,x0,0x38 # t0 = 011 1000 = 2^0 + (1 + 0,5) = 1.5
-addi t1,x0,0x46 #t1 = 100 0110 = 2^1 + (1 + 0.375) = 3.375
+addi t0,x0,0x38 # t0 = 011 1000 = 2^0 * (1 + 0,5) = 1.5
+addi t1,x0,0x46 #t1 = 100 0110 = 2^1 * (1 + 0.375) = 2.75
 
 # Adicionar seu código
 srli t3, t0, 4 # t3 = 011 (expoente do 1º numero)
@@ -17,8 +17,9 @@ beq t3, t4, DESLOCA5 # normalizar caso o vai 1 esteja ligado
 srli t1, t1, 4 # ajusta os bits da mantissa para 1 + -1 -2 -3 -4
 jal RESULTADO
 DESLOCA5: srli t1, t1, 5 # ajusta os bits da mantissa para 1 + 0 -1 -2 -3
+addi t0, t0, 1
 RESULTADO: andi t1, t1, 0b1111 # t1 = 0000 (ignoramos o 1 da mantissa)
 slli t2, t0, 4 # desloca o expoente para os 3 primeiros bits
-add t2, t2, t1 # 100 0000 (adiciona a mantissa)
+add t2, t2, t1 # 101 0000 (adiciona a mantissa)
 
 # resultado estará em t2
