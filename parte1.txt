@@ -1,4 +1,10 @@
 addi t0,x0,0x38 # t0 = 0 + 0.38
 addi t1,x0,0x46 #t1 = 0 + 0.46
 # Adicionar seu código
+srli t3, t0, 4 # t3 = expoente do 1º numero
+srli t4, t1, 4 # t4 = expoente do 2º numero
+andi t5, t0, 0b1111 # t5 = mantissa do 1º numero
+andi t6, t1, 0b1111 # t6 = mantissa do 2º numero
+ori t5, t5, 0x10 # ligando bit implícito do 1º numero
+ori t6, t6, 0x10 # ligando bit implícito do 2º numero
 # resultado estará em t2
