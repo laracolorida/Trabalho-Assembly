@@ -13,7 +13,7 @@ slli t1, t1, 8 # desloca os bits para o lugar do proximo caractere
 or t0, t0, t1 # junta os valores dos caracteres em um unico registrador
 sw t0, 4(gp) # salva o valor dos caracteres de t0 na linha gp + 4
 
-addi t0, x0, 0b1000 # define t0 como o valor da mantissa
+addi t0, x0, 0b0000 # define t0 como o valor da mantissa
 andi t4, t0, 0b1 # define t4 como o estado do bit que representa 2^-4
 srli t0, t0, 1 # ignora o ultimo bit para analisar o proximo
 andi t3, t0, 0b1 # define t3 como o estado do bit que representa 2^-3
@@ -34,13 +34,5 @@ VERIFICAR_1/2: bne t1, t5, IMPRIME_MANTISSA #verifica se o bit do 2^-1 esta liga
 addi t0, t0, 500 # soma o valor correspondente ao bit 2^-1
 
 IMPRIME_MANTISSA: sw t0, 8(gp)
-
-
-
-
-
-
-
-
 
 
