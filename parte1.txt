@@ -1,5 +1,5 @@
-addi t0,x0,0x38 # t0 = 0 + 0.38
-addi t1,x0,0x46 #t1 = 0 + 0.46
+addi t0,x0,0x38 # t0 = 010 0110 = 2^(-1) + (1 + 0,375) = 
+addi t1,x0,0x46 #t1 = 010 1110
 # Adicionar seu código
 srli t3, t0, 4 # t3 = expoente do 1º numero
 srli t4, t1, 4 # t4 = expoente do 2º numero
