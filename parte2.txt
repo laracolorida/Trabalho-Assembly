@@ -1,13 +1,38 @@
-addi to,xo, 0x48
-#...
-addi t1,x0, 50
-addi t2, x0, 94
-slli t2,t2,8
-or t1,t1,t2
-addi t0,t0,48
-slli t0,t0,24
-or t1,t1,t0
-addi t0,x0,45
-slli t0,t0,16
-or t1,t1,t0
-sw t1, 0(gp)
+addi t0,x0,50 # define t0 como 2 com o valor da tabela ASCII
+addi t1, x0, 94 # define t1 como ^ com o valor da tabela ASCII
+addi t2, x0, 50 # define t2 como o expoente 2 com o valor da tabela ASCII
+slli t1, t1, 8 # desloca os bits para o lugar do proximo caractere
+slli t2, t2, 16 # desloca os bits para o lugar do proximo caractere
+or t0, t0, t1 # junta os valores dos caracteres em um unico registrador
+or t0, t0, t2 # junta os valores dos caracteres em um unico registrador
+sw t0, 0(gp) # salva o valor dos caracteres de t0 na linha de gp
+
+addi t0, x0, 49 # define t0 como 1 com o valor da tabela ASCII
+addi t1, x0, 46 # define t1 como . com o valor da tabela ASCII
+slli t1, t1, 8 # desloca os bits para o lugar do proximo caractere
+or t0, t0, t1 # junta os valores dos caracteres em um unico registrador
+sw t0, 4(gp) # salva o valor dos caracteres de t0 na linha gp + 4
+
+addi t0, x0, 0b0000 # define t0 como o valor da mantissa
+andi t4, t0, 0b1 # define t4 como o estado do bit que representa 2^-4
+srli t0, t0, 1 # ignora o ultimo bit para analisar o proximo
+andi t3, t0, 0b1 # define t3 como o estado do bit que representa 2^-3
+srli t0, t0, 1 # ignora o ultimo bit para analisar o proximo
+andi t2, t0, 0b1 # define t2 como o estado do bit que representa 2^-2
+srli t0, t0, 1 # ignora o ultimo bit para analisar o proximo
+andi t1, t0, 0b1 # define t1 como o estado do bit que representa 2^-1
+
+addi t0, x0, 0 # define t0 como 0 para ele receber o valor da mantissa em decimal
+bne t4, x1, VERIFICAR_1/8 #verifica se o bit do 2^-4 esta ligado, se nao tiver vai para o proximo
+addi t0, t0, 0625 # soma o valor correspondente ao bit 2^-4
+VERIFICAR_1/8: bne t3, x1, VERIFICAR_1/4 #verifica se o bit do 2^-3 esta ligado, se nao tiver vai para o proximo
+addi t0, t0, 375 # soma o valor correspondente ao bit 2^-3
+VERIFICAR_1/4: bne t2, x1, VERIFICAR_1/2 #verifica se o bit do 2^-2 esta ligado, se nao tiver vai para o proximo
+addi t0, t0, 250 # soma o valor correspondente ao bit 2^-2
+VERIFICAR_1/2: bne t1, x1, IMPRIME_MANTISSA #verifica se o bit do 2^-1 esta ligado, se nao tiver vai imprimir
+addi t0, t0, 500 # soma o valor correspondente ao bit 2^-1
+
+IMPRIME_MANTISSA: 
+
+
+
