@@ -1,56 +1,25 @@
-addi t0, x0, 0b1010000 #define t0 como o numero float
+addi t0,x0,0x38 # t0 = 011 1000 = 2^0 * (1 + 0,5) = 1.5
+addi t1,x0,0x46 #t1 = 100 0110 = 2^1 * (1 + 0.375) = 2.75
 
-srli t1, t0, 4 # define t1 como o expoente - 101
-andi t2, t0, 0b1111 # define t2 como a mantissa - 0000
+# Adicionar seu código
+srli t3, t0, 4 # t3 = 011 (expoente do 1º numero)
+srli t4, t1, 4 # t4 = 100 (expoente do 2º numero)
+andi t5, t0, 0b1111 # t5 = 1000 (mantissa do 1º numero)
+andi t6, t1, 0b1111 # t6 = 0110 (mantissa do 2º numero)
+add t0, t3, t4 # t0 recebe a soma dos expoentes
+addi t0, t0, -3 # subtraindo 3 de t0 para saber o exponete final = 100
+ori t5, t5, 0x10 # ligando bit implícito do 1º numero 1 1000
+ori t6, t6, 0x10 # ligando bit implícito do 2º numero 1 0110
+mul t1, t5, t6 # multiplicação dos bits das mantissas em t5 e t6 // t1 = t5 x t6 = 11000 x 10110 = 10 0001 0000// em hex = 210 
+andi t3, t1, 0x200 # verificando se o vai 1 está ligado
+addi t4, x0, 0x200
+beq t3, t4, DESLOCA5 # normalizar caso o vai 1 esteja ligado
+srli t1, t1, 4 # ajusta os bits da mantissa para 1 + -1 -2 -3 -4
+jal RESULTADO
+DESLOCA5: srli t1, t1, 5 # ajusta os bits da mantissa para 1 + 0 -1 -2 -3
+addi t0, t0, 1
+RESULTADO: andi t1, t1, 0b1111 # t1 = 0000 (ignoramos o 1 da mantissa)
+slli t2, t0, 4 # desloca o expoente para os 3 primeiros bits
+add t2, t2, t1 # 101 0000 (adiciona a mantissa)
 
-#e -3 +48 = e +45
-addi t5, t1, -3 # define t5 como e-3
-blt t5, x0, NEGATIVO # verifica se o expoente é negativo
-addi t6, x0, 43 # define t6 como + com o valor da tabela ASCII
-jal CONV_ASCII # pula para a conversão de ASCII
-NEGATIVO: addi t6, x0, -1 # define t6 = -1 
-mul t5, t5, t6 # usamos t6 para transformar t5 em positivo
-addi t6, x0, 45 # define t6 como - com o valor da tabela ASCII
-CONV_ASCII: addi t5, t5, 48 # define t5 como o expoente com o valor da tabela ASCII
-
-#primeira linha da impressão
-addi t3,x0,50 # define t3 como 2 com o valor da tabela ASCII
-addi t4, x0, 94 # define t4 como ^ com o valor da tabela ASCII
-slli t4, t4, 8 # desloca os bits para o lugar do proximo caractere
-slli t6, t6, 16 # desloca os bits para o lugar do proximo caractere
-slli t5, t5, 24 # desloca os bits para o lugar do proximo caractere
-or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
-or t3, t3, t5 # junta os valores dos caracteres em um unico registrador
-or t3, t3, t6 # junta os valores dos caracteres em um unico registrador
-sw t3, 0(gp) # salva o valor dos caracteres de t na linha de gp
-
-#segunda linha da impressão
-addi t3, x0, 49 # define t0 como 1 com o valor da tabela ASCII
-addi t4, x0, 46 # define t1 como . com o valor da tabela ASCII
-slli t4, t4, 8 # desloca os bits para o lugar do proximo caractere
-or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
-sw t3, 4(gp) # salva o valor dos caracteres de t03 na linha gp + 4
-
-# switch para descobrir o valor da mantissa
-#addi t1, x0, 0b0000 
-#beq t0, t1, ZERO # case 0
-#addi t1, x0, 0b1000
-#beq t0, t1, MEIO # case 2^⁻1
-#addi t1, x0, 0b0100
-#beq t0, t1, QUARTO # case 2^⁻2
-#addi t1, x0, 0b0010
-#beq t0, t1, OITAVO # case 2^⁻3
-#addi t1, x0, 0b0001
-#beq t0, t1, DEZESSEISAVOS # case 2^⁻4
-#addi t1, x0, 0b001100
-#beq t0, t1, M_QUARTO # case 2^⁻1 + 2^-2
-#...
-
-
-#ZERO: addi, t0, x0, 5
-#jal 
-
-
-
-
-
+# resultado estará em t2
