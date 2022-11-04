@@ -32,19 +32,38 @@ or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
 sw t3, 4(gp) # salva o valor dos caracteres de t03 na linha gp + 4
 
 # switch para descobrir o valor da mantissa
-#addi t1, x0, 0b0000 
-#beq t0, t1, ZERO # case 0
-#addi t1, x0, 0b1000
-#beq t0, t1, MEIO # case 2^⁻1
-#addi t1, x0, 0b0100
-#beq t0, t1, QUARTO # case 2^⁻2
-#addi t1, x0, 0b0010
-#beq t0, t1, OITAVO # case 2^⁻3
-#addi t1, x0, 0b0001
-#beq t0, t1, DEZESSEISAVOS # case 2^⁻4
-#addi t1, x0, 0b001100
-#beq t0, t1, M_QUARTO # case 2^⁻1 + 2^-2
-#...
+addi t3, x0, 0b0000 
+beq t3, t2, ZERO # case 0
+addi t3, x0, 0b1000
+beq t3, t1, MEIO # case 2^⁻1
+addi t3, x0, 0b0100
+beq t3, t2, QUARTO # case 2^⁻2
+addi t3, x0, 0b0010
+beq t3, t2, OITAVO # case 2^⁻3
+addi t3, x0, 0b0001
+beq t3, t2, DEZESSEISAVOS # case 2^⁻4
+addi t3, x0, 0b1100
+beq t3, t2, MEIO_QUARTO # case 2^⁻1 + 2^-2
+addi t3, x0, 0b1010
+beq t3, t2, MEIO_OITAVO # case 2^⁻1 + 2^-3
+addi t3, x0, 0b1001
+beq t3, t2, MEIO_DEZESSEISAVOS # case 2^⁻1 + 2^-4
+addi t3, x0, 0b0110
+beq t3, t2, QUARTO_OITAVO # case 2^⁻2 + 2^-3
+addi t3, x0, 0b0101
+beq t3, t2, QUARTO_DEZESSEISAVOS # case 2^⁻2 + 2^-4
+addi t3, x0, 0b0011
+beq t3, t2, OITAVO_DEZESSEISAVOS # case 2^⁻3 + 2^-4
+addi t3, x0, 0b1110
+beq t3, t2, MEIO_QUARTO_OITAVO # case 2^⁻1 + 2^-2 + 2^-3
+addi t3, x0, 0b1101
+beq t3, t2, MEIO_QUARTO_DEZESSEISAVOS # case 2^⁻1 + 2^-2 + 2^-4
+addi t3, x0, 0b0111
+beq t3, t2, MEIO_OITAVO_DEZESSEISAVOS # case 2^⁻1 + 2^-3 + 2^-4
+addi t3, x0, 0b1011
+beq t3, t2, QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻2 + 2^-3 + 2^-4
+addi t3, x0, 0b1111
+beq t3, t2, MEIO_QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻1 + 2^⁻2 + 2^-3 + 2^-4
 
 
 #ZERO: addi, t0, x0, 5
