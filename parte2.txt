@@ -109,7 +109,7 @@ MEIO_QUARTO: addi, t3, x0, 53
 addi, t4, x0, 55
 jal DOIS_DECIMAIS
 
-MEIO_OITAVO: t3, x0, 54
+MEIO_OITAVO: addi, t3, x0, 54
 addi, t4, x0, 50
 addi, t5, x0, 53
 jal TRES_DECIMAIS
@@ -120,7 +120,7 @@ addi, t5, x0, 50
 addi, t6, x0, 53
 jal QUATRO_DECIMAIS
 
-QUARTO_OITAVO: t3, x0, 51
+QUARTO_OITAVO: addi, t3, x0, 51
 addi, t4, x0, 55
 addi, t5, x0, 53
 jal TRES_DECIMAIS
@@ -137,7 +137,7 @@ addi, t5, x0, 55
 addi, t6, x0, 53
 jal QUATRO_DECIMAIS
 
-MEIO_QUARTO_OITAVO: t3, x0, 56
+MEIO_QUARTO_OITAVO: addi, t3, x0, 56
 addi, t4, x0, 55
 addi, t5, x0, 53
 jal TRES_DECIMAIS
