@@ -34,59 +34,97 @@ sw t3, 4(gp) # salva o valor dos caracteres de t03 na linha gp + 4
 # switch para descobrir o valor da mantissa
 addi t3, x0, 0b0000 
 beq t3, t2, ZERO # case 0
+
 addi t3, x0, 0b1000
 beq t3, t1, MEIO # case 2^⁻1
+
 addi t3, x0, 0b0100
 beq t3, t2, QUARTO # case 2^⁻2
+
 addi t3, x0, 0b0010
 beq t3, t2, OITAVO # case 2^⁻3
+
 addi t3, x0, 0b0001
 beq t3, t2, DEZESSEISAVOS # case 2^⁻4
+
 addi t3, x0, 0b1100
 beq t3, t2, MEIO_QUARTO # case 2^⁻1 + 2^-2
+
 addi t3, x0, 0b1010
 beq t3, t2, MEIO_OITAVO # case 2^⁻1 + 2^-3
+
 addi t3, x0, 0b1001
 beq t3, t2, MEIO_DEZESSEISAVOS # case 2^⁻1 + 2^-4
+
 addi t3, x0, 0b0110
 beq t3, t2, QUARTO_OITAVO # case 2^⁻2 + 2^-3
+
 addi t3, x0, 0b0101
 beq t3, t2, QUARTO_DEZESSEISAVOS # case 2^⁻2 + 2^-4
+
 addi t3, x0, 0b0011
 beq t3, t2, OITAVO_DEZESSEISAVOS # case 2^⁻3 + 2^-4
+
 addi t3, x0, 0b1110
 beq t3, t2, MEIO_QUARTO_OITAVO # case 2^⁻1 + 2^-2 + 2^-3
+
 addi t3, x0, 0b1101
 beq t3, t2, MEIO_QUARTO_DEZESSEISAVOS # case 2^⁻1 + 2^-2 + 2^-4
+
 addi t3, x0, 0b0111
 beq t3, t2, MEIO_OITAVO_DEZESSEISAVOS # case 2^⁻1 + 2^-3 + 2^-4
+
 addi t3, x0, 0b1011
 beq t3, t2, QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻2 + 2^-3 + 2^-4
+
 addi t3, x0, 0b1111
 beq t3, t2, MEIO_QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻1 + 2^⁻2 + 2^-3 + 2^-4
 
+
 #Depois de acomparar a mantissa, executamos a linha correspondente
-#Gravamos nos registradores os valores da tabela ASCII correspondentes ao números que precisamos imprimir
+#Gravamos nos registradores os valores da tabela ASCII correspondentes às casas decimais que precisamos imprimir
 
-ZERO: addi, t4, x0, 48
-jal 1_DECIMAL
+ZERO: addi, t3, x0, 48
+jal UM_DECIMAL
 
-MEIO: addi, t4, x0, 53
-jal 1_DECIMAL
+MEIO: addi, t3, x0, 53
+jal UM_DECIMAL
 
-QUARTO: addi, t4, x0, 50
+QUARTO: addi, t3, x0, 50
+addi, t4, x0, 53
+jal DOIS_DECIMAIS
+
+OITAVO: addi, t3, x0, 49 
+addi, t4, x0, 50
 addi, t5, x0, 53
-jal 2_DECIMAIS
+jal TRES_DECIMAIS
 
-OITAVO: addi, t4, x0, 
-addi, t5, x0, 
-addi, t6, x0, 
+DEZESSEISAVOS: addi, t3, x0, 48
+addi, t4, x0, 54
+addi, t5, x0, 50
+addi, t6, x0, 49
+jal QUATRO_DECIMAIS
 
-DEZESSEISAVOS:
-MEIO_QUARTO:
-MEIO_OITAVO:
-MEIO_DEZESSEISAVOS:
-QUARTO_OITAVO:
+MEIO_QUARTO: addi, t3, x0, 53
+addi, t4, x0, 55
+jal DOIS_DECIMAIS
+
+MEIO_OITAVO: t3, x0, 54
+addi, t4, x0, 50
+addi, t5, x0, 53
+jal TRES_DECIMAIS
+
+MEIO_DEZESSEISAVOS: addi, t3, x0, 53
+addi, t4, x0, 54
+addi, t5, x0, 50
+addi, t6, x0, 53
+jal QUATRO_DECIMAIS
+
+QUARTO_OITAVO: t3, x0, 54
+addi, t4, x0, 50
+addi, t5, x0, 53
+jal TRES_DECIMAIS
+
 QUARTO_DEZESSEISAVOS:
 OITAVO_DEZESSEISAVOS:
 MEIO_QUARTO_OITAVO:
@@ -96,8 +134,8 @@ QUARTO_OITAVO_DEZESSEISAVOS:
 MEIO_QUARTO_OITAVO_DEZESSEISAVOS:
 
 #Linhas para imprimir 1, 2, 3, ou 4 casas decimais
-1_DECIMAL:
-2_DECIMAIS:
-3_DECIMAIS:
-4_DECIMAIS:
+UM_DECIMAL:
+DOIS_DECIMAIS:
+TRES_DECIMAIS:
+QUATRO_DECIMAIS:
 
