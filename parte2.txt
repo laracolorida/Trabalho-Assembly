@@ -65,11 +65,23 @@ beq t3, t2, QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻2 + 2^-3 + 2^-4
 addi t3, x0, 0b1111
 beq t3, t2, MEIO_QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻1 + 2^⁻2 + 2^-3 + 2^-4
 
-#Depois de achar a mantissa, executamos a linha correspondente
-ZERO:
-MEIO:
-QUARTO:
-OITAVO:
+#Depois de acomparar a mantissa, executamos a linha correspondente
+#Gravamos nos registradores os valores da tabela ASCII correspondentes ao números que precisamos imprimir
+
+ZERO: addi, t4, x0, 48
+jal 1_DECIMAL
+
+MEIO: addi, t4, x0, 53
+jal 1_DECIMAL
+
+QUARTO: addi, t4, x0, 50
+addi, t5, x0, 53
+jal 2_DECIMAIS
+
+OITAVO: addi, t4, x0, 
+addi, t5, x0, 
+addi, t6, x0, 
+
 DEZESSEISAVOS:
 MEIO_QUARTO:
 MEIO_OITAVO:
@@ -83,7 +95,9 @@ MEIO_OITAVO_DEZESSEISAVOS:
 QUARTO_OITAVO_DEZESSEISAVOS:
 MEIO_QUARTO_OITAVO_DEZESSEISAVOS:
 
-
-#ZERO: addi, t0, x0, 5
-#jal 
+#Linhas para imprimir 1, 2, 3, ou 4 casas decimais
+1_DECIMAL:
+2_DECIMAIS:
+3_DECIMAIS:
+4_DECIMAIS:
 
