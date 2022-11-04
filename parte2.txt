@@ -142,10 +142,29 @@ addi, t4, x0, 55
 addi, t5, x0, 53
 jal TRES_DECIMAIS
 
-MEIO_QUARTO_DEZESSEISAVOS:
-MEIO_OITAVO_DEZESSEISAVOS:
-QUARTO_OITAVO_DEZESSEISAVOS:
-MEIO_QUARTO_OITAVO_DEZESSEISAVOS:
+MEIO_QUARTO_DEZESSEISAVOS: addi, t3, x0, 56
+addi, t4, x0, 49
+addi, t5, x0, 50
+addi, t6, x0, 53
+jal QUATRO_DECIMAIS
+
+MEIO_OITAVO_DEZESSEISAVOS: addi, t3, x0, 54
+addi, t4, x0, 56
+addi, t5, x0, 55
+addi, t6, x0, 53
+jal QUATRO_DECIMAIS
+
+QUARTO_OITAVO_DEZESSEISAVOS: addi, t3, x0, 52
+addi, t4, x0, 51
+addi, t5, x0, 55
+addi, t6, x0, 53
+jal QUATRO_DECIMAIS
+
+MEIO_QUARTO_OITAVO_DEZESSEISAVOS: addi, t3, x0, 57
+addi, t4, x0, 51
+addi, t5, x0, 55
+addi, t6, x0, 53
+jal QUATRO_DECIMAIS
 
 #Linhas para imprimir 1, 2, 3, ou 4 casas decimais
 UM_DECIMAL:
