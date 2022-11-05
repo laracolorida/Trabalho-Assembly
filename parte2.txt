@@ -3,8 +3,8 @@ addi t0, x0, 0b1010000 #define t0 como o numero float
 srli t1, t0, 4 # define t1 como o expoente - 101
 andi t2, t0, 0b1111 # define t2 como a mantissa - 0000
 
-#e -3 +48 = e +45
-addi t5, t1, -3 # define t5 como e-3
+# calculando o expoente
+addi t5, t1, -3
 blt t5, x0, NEGATIVO # verifica se o expoente é negativo
 addi t6, x0, 43 # define t6 como + com o valor da tabela ASCII
 jal CONV_ASCII # pula para a conversão de ASCII
@@ -22,14 +22,14 @@ slli t5, t5, 24 # desloca os bits para o lugar do proximo caractere
 or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
 or t3, t3, t5 # junta os valores dos caracteres em um unico registrador
 or t3, t3, t6 # junta os valores dos caracteres em um unico registrador
-sw t3, 0(gp) # salva o valor dos caracteres de t na linha de gp
+sw t3, 0(gp) # salva o valor dos caracteres de t3 na linha de gp
 
 #segunda linha da impressão
 addi t3, x0, 49 # define t0 como 1 com o valor da tabela ASCII
 addi t4, x0, 46 # define t1 como . com o valor da tabela ASCII
 slli t4, t4, 8 # desloca os bits para o lugar do proximo caractere
 or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
-sw t3, 4(gp) # salva o valor dos caracteres de t03 na linha gp + 4
+sw t3, 4(gp) # salva o valor dos caracteres de t3 na linha gp + 4
 
 # switch para descobrir o valor da mantissa
 addi t3, x0, 0b0000 
@@ -81,7 +81,7 @@ addi t3, x0, 0b1111
 beq t3, t2, MEIO_QUARTO_OITAVO_DEZESSEISAVOS # case 2^⁻1 + 2^⁻2 + 2^-3 + 2^-4
 
 
-#Depois de acomparar a mantissa, executamos a linha correspondente
+#Depois de comparar a mantissa, executamos a linha correspondente
 #Gravamos nos registradores os valores da tabela ASCII correspondentes às casas decimais que precisamos imprimir
 
 ZERO: addi, t3, x0, 48
@@ -167,8 +167,27 @@ addi, t6, x0, 53
 jal QUATRO_DECIMAIS
 
 #Linhas para imprimir 1, 2, 3, ou 4 casas decimais
-UM_DECIMAL:
-DOIS_DECIMAIS:
-TRES_DECIMAIS:
-QUATRO_DECIMAIS:
+UM_DECIMAL: sw t3, 8(gp) # salva o valor dos caracteres de t3 na linha gp + 8
+jal FIM
 
+DOIS_DECIMAIS: slli t4, t4, 8 # desloca os bits para o lugar do proximo caractere
+or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
+sw t3, 8(gp) # salva o valor dos caracteres de t3 na linha gp + 8
+jal FIM
+
+TRES_DECIMAIS: slli t4, t4, 8 # desloca os bits para o lugar do proximo caractere
+slli t5, t5, 16 # desloca os bits para o lugar do proximo caractere
+or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
+or t3, t3, t5 # junta os valores dos caracteres em um unico registrador
+sw t3, 8(gp) # salva o valor dos caracteres de t3 na linha gp + 8
+jal FIM
+
+QUATRO_DECIMAIS: slli t4, t4, 8 # desloca os bits para o lugar do proximo caractere
+slli t5, t5, 16 # desloca os bits para o lugar do proximo caractere
+slli t6, t6, 24 # desloca os bits para o lugar do proximo caractere
+or t3, t3, t4 # junta os valores dos caracteres em um unico registrador
+or t3, t3, t5 # junta os valores dos caracteres em um unico registrador
+or t3, t3, t6 # junta os valores dos caracteres em um unico registrador
+sw t3, 8(gp) # salva o valor dos caracteres de t3 na linha gp + 8
+
+FIM:
