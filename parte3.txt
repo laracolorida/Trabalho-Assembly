@@ -23,9 +23,55 @@ addi t0, x0, 0
 sw t0, 40(gp)
 addi t0, x0, 1
 sw t0, 44(gp)
+addi t0, x0, 2
+sw t0, 40(gp)
+addi t0, x0, 0
+sw t0, 52(gp)
+addi t0, x0, 1
+sw t0, 56(gp)
+addi t0, x0, 3
+sw t0, 60(gp)
+addi t0, x0, 0
+sw t0, 64(gp)
+addi t0, x0, 1
+sw t0, 68(gp)
+addi t0, x0, 0
+sw t0, 72(gp)
+addi t0, x0, 2
+sw t0, 76(gp)
+addi t0, x0, 2
+sw t0, 80(gp)
+addi t0, x0, 0
+sw t0, 84(gp)
+addi t0, x0, 3
+sw t0, 88(gp)
+addi t0, x0, 2
+sw t0, 92(gp)
+addi t0, x0, -1
+sw t0, 96(gp)
 
-#
-add t3, gp()
+#Lendo informações da memória
+add t3, gp(x0)
+lw t0, 0(t3) #valor de k
+lw t1, 4(t3) #x do ponto que vamos comparar
+lw t2, 8(t3) #y do ponto que vamos comparar
+
+#Armazenando os três primeiros pontos que vamos comparar com os demais
+lw s0, 12(t3)
+lw s1, 16(t3)
+lw a0, 20(t3)
+
+lw a1, 24(t3)
+lw a2, 28(t3)
+lw a3, 32(t3)
+
+lw a4, 36(t3)
+lw a5, 40(t3)
+lw a6, 44(t3)
+
+add t4, 48(t3) #ponteiro para x
+add t5, 52(t3) #ponteiro para y
+add t6, 56(t3) #ponteiro para a classe
 
 
 
