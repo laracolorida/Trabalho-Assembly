@@ -50,37 +50,72 @@ sw t0, 92(gp)
 addi t0, x0, -1
 sw t0, 96(gp)
 
-#Lendo informações da memória
-add t3, gp(x0)
-lw t0, 0(t3) #valor de k
-lw t1, 4(t3) #x do ponto que vamos comparar
-lw t2, 8(t3) #y do ponto que vamos comparar
 
-#Armazenando os três primeiros pontos que vamos comparar com os demais
-lw s0, 12(t3)
-lw s1, 16(t3)
-lw a0, 20(t3)
-
-lw a1, 24(t3)
-lw a2, 28(t3)
-lw a3, 32(t3)
-
-lw a4, 36(t3)
-lw a5, 40(t3)
-lw a6, 44(t3)
-
-add t4, 48(t3) #ponteiro para x
-add t5, 52(t3) #ponteiro para y
-add t6, 56(t3) #ponteiro para a classe
-
-
-
-
-
-
-
-
-
+#calculando distancia
+add  t6, x0, gp   # Posição inicial dos valores
+             
+             # X do ponto de referencia
+             addi t6, t6, 4
+             lw   a0, 0(t6)
+             
+             # Y do ponto de referencia
+             addi t6, t6, 4
+             lw   a1, 0(t6)
+             
+             # Coords do primeiro vizinho
+             addi t6, t6, 4
+             lw   a2, 0(t6)   # X
+             addi t6, t6, 4
+             lw   a3, 0(t6)   # Y
+                    
+             # Enquanto o X daquele ponto nao for -1, calcula a distância e vai pro 
+             # próximo ponto. 
+             # Uma espécie de loop do while().
+             addi t1, x0, -1
+             LOOP: beq a2, t1, END_LOOP
+			            add a4, x0, a0
+                        add a5, x0, a1
+                        
+                        # DISTANCIA DE MANHATTAN
+                        # Calcula as diferenças de x e y
+                        sub a4, a4, a2
+                        sub a5, a5, a3
+                        
+                        # Realiza a operação de módulo
+                        #srai t3, a4, 31
+                        #srai t4, a5, 31
+                        
+                        #xor a4, a4, t3
+                        #xor a5, a5, t4
+                        
+                        #sub a4, a4, t3
+                        #sub a5, a5, t4
+                        
+                        blt a4, x0, MUL_X
+                        jal CHECK_Y
+                        MUL_X: mul a4, a4, t1
+                        CHECK_Y: blt a5, x0, MUL_Y
+                        jal SOMA
+                        MUL_Y: mul a5, a5, t1
+                        
+                        # Soma as coordenadas
+                        SOMA: add a4, a4, a5
+                        
+                        # Salva a diferença ao lado do Y
+						add t3, x0, a4
+                        slli t3, t3, 8
+                        or t3, t3, a3
+                        sw t3, 0(t6)
+                        
+                        # Carrega os próximos pontos
+						addi t6, t6, 8
+                        
+             			lw   a2, 0(t6)   # X
+             			addi t6, t6, 4
+             			lw   a3, 0(t6)   # Y
+                          
+                        jal LOOP
+END_LOOP:
 
 
 
