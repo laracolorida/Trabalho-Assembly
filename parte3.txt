@@ -49,7 +49,8 @@ addi t0, x0, 2
 sw t0, 92(gp)
 addi t0, x0, -1
 sw t0, 96(gp)
-
+addi t0, x0, -1
+sw t0, 100(gp) # Adiciona mais uma linha de -1 após as distancias que serao registradas
 
 #calculando distancia
 add  t6, x0, gp   # Posição inicial dos valores
@@ -119,20 +120,20 @@ add  t6, x0, gp   # Posição inicial dos valores
                         
 END_LOOP: add  t6, x0, gp   # Início do array de pontos
 			 addi t5, t6, 20   # Aponta para a classe mais proxima
+             andi t5, t5, 0b11111111
              add t4, x0, t5    # Aponta para cada classe
              
              addi t3, x6, 255     # Aponta para a MELHOR distancia
-			 addi t6, t6, X    # Aponta para cada distancia
+			 addi t6, t6, 16    # Aponta para cada distancia
              
-             lw   a0, 0(t6)
+             lw   a0, 0(t6) # a0 recebe a primeira distancia
              add s8, x0, a0  # Supondo que a primeira distancia e a melhor.
              
-             addi t6, t6, 4 # Vai para a proxima distancia
+             addi t6, t6, 12 # Vai para a proxima distancia
              lw a0, 0(t6)
              
-             # Adiciona mais uma linha de -1 após as distancias
              # Encontra a menor distância.
-             DO_WHILE_BUSCA: beq a0, t1, FIM
+             LOOP_MIN_DISTANCIA: beq a0, t1, FIM
              		      
                           	 # Atualiza os melhores, se achar um menor
                           	 bge a0, s8, MAIOR  
@@ -141,16 +142,17 @@ END_LOOP: add  t6, x0, gp   # Início do array de pontos
                                  add t5, x0, t4
              		     
                          	# Senao, so vai pro proximo
-             		         MAIOR: addi t6, t6, 4  # Vai pra proximo posicao das distancias
+             		         MAIOR: addi t6, t6, 12  # Vai pra proximo posicao das distancias
                                     addi t4, t4, 12
+                                    andi t4, t4, 0b11111111
                              lw   a0, 0(t6)
                              
-             		         jal DO_WHILE_BUSCA
+             		         jal LOOP_MIN_DISTANCIA
              		     
             # Salva 255 na posicao da distancia mais curta para que ela nao se repita
-	        FIM: sw 255, 0(t3)
+	        FIM: #sw 255, 0(t3)
                  lw t0, 0(t5)  # A classe do mais proximo
-                 sw t0, XXXXX  # Salva a classe do mais proximo na posicao que vcs quiserem
+                 #sw t0, XXXXX  # Salva a classe do mais proximo na posicao que vcs quiserem
 
 
 
