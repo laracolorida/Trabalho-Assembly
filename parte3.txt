@@ -1,3 +1,4 @@
+#Gravando os valores do vetor na memória
 addi t0, x0, 3
 sw t0, 0(gp)
 addi t0, x0, 2
@@ -22,32 +23,9 @@ addi t0, x0, 0
 sw t0, 40(gp)
 addi t0, x0, 1
 sw t0, 44(gp)
-addi t0, x0, 2
-sw t0, 40(gp)
-addi t0, x0, 0
-sw t0, 52(gp)
-addi t0, x0, 1
-sw t0, 56(gp)
-addi t0, x0, 3
-sw t0, 60(gp)
-addi t0, x0, 0
-sw t0, 64(gp)
-addi t0, x0, 1
-sw t0, 68(gp)
-addi t0, x0, 0
-sw t0, 72(gp)
-addi t0, x0, 2
-sw t0, 76(gp)
-addi t0, x0, 2
-sw t0, 80(gp)
-addi t0, x0, 0
-sw t0, 84(gp)
-addi t0, x0, 3
-sw t0, 88(gp)
-addi t0, x0, 2
-sw t0, 92(gp)
-addi t0, x0, -1
-sw t0, 96(gp)
+
+#
+add t3, gp()
 
 
 
