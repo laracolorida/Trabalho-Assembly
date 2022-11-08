@@ -119,14 +119,30 @@ add  t6, x0, gp   # Posição inicial dos valores
                         
                         
 END_LOOP: add  t6, x0, gp   # Início do array de pontos
-			 addi t5, t6, 20   # Aponta para a classe mais proxima
-             andi t5, t5, 0b11111111
-             add t4, x0, t5    # Aponta para cada classe
+
+			 addi t6, t6, 16    # Aponta para a primeira distancia
+             add s1, x0, t6
+             addi t6, t6, 28    # Aponta para a segunda distancia
+             add s2, x0, t6
+             addi t6, t6, 40    # Aponta para a terceira distancia (conferir)
+             add s3, x0, t6
              
-             addi t3, x6, 255     # Aponta para a MELHOR distancia
-			 addi t6, t6, 16    # Aponta para cada distancia
+             MAIOR_DISTANCIA:
+             addi s0, x0, 0 #maior distancia das menores
+             bge s1, s2, ELSE1
+             bge s1, s3, S2_MAIOR
+             bge s2, s3, S2_MAIOR
+             add s0, x0, s3
+             jal FINAL
+             ELSE1: bge s1, s3, S1_MAIOR
+             jal FINAL
+             S2_MAIOR: add s0, x0, s2
+             jal FINAL
+             S1_MAIOR: add s0, x0, s1
              
-             lw   a0, 0(t6) # a0 recebe a primeira distancia
+             FINAL: 
+             
+             lw   a0, 12(t6) # a0 recebe a primeira distancia
              add s8, x0, a0  # Supondo que a primeira distancia e a melhor.
              
              addi t6, t6, 12 # Vai para a proxima distancia
