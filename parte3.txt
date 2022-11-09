@@ -55,29 +55,26 @@ sw t0, 100(gp) # Adiciona mais uma linha de -1 após as distancias que serao reg
 #calculando distancia
 add  t6, x0, gp   # Posição inicial dos valores
              
-             # X do ponto de referencia
-             addi t6, t6, 4
-             lw   a0, 0(t6)
+addi t6, t6, 4 # X do ponto dado na questao
+lw a0, 0(t6)
              
-             # Y do ponto de referencia
-             addi t6, t6, 4
-             lw   a1, 0(t6)
+addi t6, t6, 4 # Y do ponto dado na questao
+lw a1, 0(t6)
              
-             # Coords do primeiro vizinho
-             addi t6, t6, 4
-             lw   a2, 0(t6)   # X
-             addi t6, t6, 4
-             lw   a3, 0(t6)   # Y
+#Ponteiro para os pontos a serem analisados
+addi t6, t6, 4
+lw a2, 0(t6) # X
+addi t6, t6, 4
+lw a3, 0(t6) # Y
                     
-             # Enquanto o X daquele ponto nao for -1, calcula a distância e vai pro 
-             # próximo ponto. 
-             # Uma espécie de loop do while().
-             addi t1, x0, -1
-             LOOP: beq a2, t1, END_LOOP
-			            add a4, x0, a0
-                        add a5, x0, a1
+# Enquanto o X daquele ponto nao for -1, calcula a distância e vai pro próximo ponto. 
+addi t1, x0, -1
+
+LOOP: beq a2, t1, END_LOOP
+add a4, x0, a0
+add a5, x0, a1
                         
-                        # DISTANCIA DE MANHATTAN
+# DISTANCIA DE MANHATTAN
                         # Calcula as diferenças de x e y
                         sub a4, a4, a2
                         sub a5, a5, a3
@@ -159,7 +156,7 @@ END_LOOP: add  t6, x0, gp   # Início do array de pontos
             add s8, s3, s4
             add s8, s8, s5
             
-            addi s6, x0, 5
+            
             bge s8, s6, IMPRIME_2
             jal IMPRIME_1
             
@@ -167,5 +164,5 @@ END_LOOP: add  t6, x0, gp   # Início do array de pontos
             jal TERMINO
             IMPRIME_1: addi, gp, x0, 1
             
-            TERMINO
+            TERMINO:
 
