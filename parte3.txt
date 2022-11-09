@@ -121,14 +121,17 @@ add  t6, x0, gp   # Posição inicial dos valores
 END_LOOP: add  t6, x0, gp   # Início do array de pontos
 
 			 addi t6, t6, 16    # Aponta para a primeira distancia
+             andi t6, t6, 0b11111111
              add s1, x0, t6
              addi t6, t6, 28    # Aponta para a segunda distancia
+             andi t6, t6, 0b11111111
              add s2, x0, t6
              addi t6, t6, 40    # Aponta para a terceira distancia (conferir)
+             andi t6, t6, 0b11111111
              add s3, x0, t6
              
              MAIOR_DISTANCIA:
-             addi s0, x0, 0 #maior distancia das menores
+             addi s0, x0, t6 #maior distancia das menores
              bge s1, s2, ELSE1
              bge s1, s3, S2_MAIOR
              bge s2, s3, S2_MAIOR
@@ -140,37 +143,24 @@ END_LOOP: add  t6, x0, gp   # Início do array de pontos
              jal FINAL
              S1_MAIOR: add s0, x0, s1
              
-             FINAL: 
-             
-             lw   a0, 12(t6) # a0 recebe a primeira distancia
-             add s8, x0, a0  # Supondo que a primeira distancia e a melhor.
-             
-             addi t6, t6, 12 # Vai para a proxima distancia
+             FINAL: addi t6, t6, 12 # Vai para a proxima distancia
              lw a0, 0(t6)
              
              # Encontra a menor distância.
              LOOP_MIN_DISTANCIA: beq a0, t1, FIM
              		      
                           	 # Atualiza os melhores, se achar um menor
-                          	 bge a0, s8, MAIOR  
-                             	 add t3, x0, t6
-             		  	         add s8, x0, a0
-                                 add t5, x0, t4
+                          	 bge a0, s0, MAIOR  
+                             	 sw a0, 0(s0)
+                                 add s0, x0, a0
+                                 jal MAIOR_DISTANCIA
              		     
                          	# Senao, so vai pro proximo
              		         MAIOR: addi t6, t6, 12  # Vai pra proximo posicao das distancias
-                                    addi t4, t4, 12
-                                    andi t4, t4, 0b11111111
+                                    andi t6, t6, 0b11111111
                              lw   a0, 0(t6)
                              
              		         jal LOOP_MIN_DISTANCIA
-             		     
-            # Salva 255 na posicao da distancia mais curta para que ela nao se repita
-	        FIM: #sw 255, 0(t3)
-                 lw t0, 0(t5)  # A classe do mais proximo
-                 #sw t0, XXXXX  # Salva a classe do mais proximo na posicao que vcs quiserem
-
-
-
-
+             
+            FIM: 
 
