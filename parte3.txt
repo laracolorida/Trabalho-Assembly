@@ -81,17 +81,7 @@ add  t6, x0, gp   # Posição inicial dos valores
                         # Calcula as diferenças de x e y
                         sub a4, a4, a2
                         sub a5, a5, a3
-                        
-                        # Realiza a operação de módulo
-                        #srai t3, a4, 31
-                        #srai t4, a5, 31
-                        
-                        #xor a4, a4, t3
-                        #xor a5, a5, t4
-                        
-                        #sub a4, a4, t3
-                        #sub a5, a5, t4
-                        
+
                         blt a4, x0, MUL_X
                         jal CHECK_Y
                         MUL_X: mul a4, a4, t1
@@ -131,7 +121,7 @@ END_LOOP: add  t6, x0, gp   # Início do array de pontos
              add s3, x0, t6
              
              MAIOR_DISTANCIA:
-             addi s0, x0, t6 #maior distancia das menores
+             add s0, x0, t6 #maior distancia das menores
              bge s1, s2, ELSE1
              bge s1, s3, S2_MAIOR
              bge s2, s3, S2_MAIOR
@@ -162,5 +152,20 @@ END_LOOP: add  t6, x0, gp   # Início do array de pontos
                              
              		         jal LOOP_MIN_DISTANCIA
              
-            FIM: 
+            FIM: lw s3, 4(s1)
+            lw s4, 4(s2)
+            lw s5, 4(s3)
+            
+            add s8, s3, s4
+            add s8, s8, s5
+            
+            addi s6, x0, 5
+            bge s8, s6, IMPRIME_2
+            jal IMPRIME_1
+            
+            IMPRIME_2: addi, gp, x0, 2
+            jal TERMINO
+            IMPRIME_1: addi, gp, x0, 1
+            
+            TERMINO
 
