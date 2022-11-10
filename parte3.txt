@@ -107,7 +107,7 @@ jal LOOP
 #Agora vamos procurar as 3 menos distância encontradas, ou seja, as distâncias dos pontos mais próximos
 END_LOOP: add  t6, x0, gp   # Início do array de pontos
 
-#Inicialmente, carregamos as distências dos três primeiros pontos da memória
+#Inicialmente, carregamos as distâncias dos três primeiros pontos da memória
 addi t6, t6, 16    # Aponta para a primeira distancia
 andi t6, t6, 0b11111111
 add s1, x0, t6
