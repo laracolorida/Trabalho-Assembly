@@ -163,8 +163,8 @@ add s8, s8, s6
 
 #Soma 3 ou 4 indicam que a classe predominante é 1 (1+1+1 ou 1+1+2)
 #soma 5 ou 6 indicam que a classe predominante é 2 (1+2+2 ou 2+2+2)
-addi s6, x0, 5
-bge s8, s6, IMPRIME_2
+addi s7, x0, 5
+bge s8, s7, IMPRIME_2
 jal IMPRIME_1
 
 IMPRIME_2: addi, gp, x0, 2
