@@ -152,14 +152,14 @@ LOOP_MIN_DISTANCIA: beq a0, t1, FIM
 
 jal LOOP_MIN_DISTANCIA
 
-#Carregamos as classes dos três pontos mais próximos e armazenamos em s3, s4 e s5
-FIM: lw s3, 4(s1)
-lw s4, 4(s2)
-lw s5, 4(s3)
+#Carregamos as classes dos três pontos mais próximos e armazenamos em s4, s5 e s6
+FIM: lw s4, 4(s1)
+lw s5, 4(s2)
+lw s6, 4(s3)
 
 #Somamos as três e guardamos em s8
-add s8, s3, s4
-add s8, s8, s5
+add s8, s4, s5
+add s8, s8, s6
 
 #Soma 3 ou 4 indicam que a classe predominante é 1 (1+1+1 ou 1+1+2)
 #soma 5 ou 6 indicam que a classe predominante é 2 (1+2+2 ou 2+2+2)
