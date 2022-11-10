@@ -109,19 +109,16 @@ jal LOOP
 END_LOOP: add  t6, x0, gp   # Início do array de pontos
 
 #Inicialmente, carregamos as distâncias dos três primeiros pontos da memória
-addi t6, t6, 16    # Aponta para a primeira distancia
-andi t6, t6, 0b11111111
-add s1, x0, t6
-addi t6, t6, 28    # Aponta para a segunda distancia
-andi t6, t6, 0b11111111
-add s2, x0, t6
-addi t6, t6, 40    # Aponta para a terceira distancia (conferir)
-andi t6, t6, 0b11111111
-add s3, x0, t6
+lw s1, 16(t6) # Aponta para a primeira distancia
+srli s1, s1, 8
+lw s2, 28(t6) # Aponta para a segunda distancia
+srli s2, s2, 8
+lw s3, 40(t6) # Aponta para a terceira distancia
+srli s3, s3, 8
 
 #Vamos calcular e armazenar em s0 qual é a maior das três distãncias que colocamos em s1, s2 e s3 
+lw s0, 0(t6) #maior distancia das menores
 MAIOR_DISTANCIA:
-add s0, x0, t6 #maior distancia das menores
 bge s1, s2, ELSE1
 bge s1, s3, S2_MAIOR
 bge s2, s3, S2_MAIOR
@@ -135,32 +132,14 @@ S1_MAIOR: add s0, x0, s1
 
 FINAL: addi t6, t6, 12 # Vai para a proxima distancia
 lw a0, 0(t6)
-             
-# Compara cada distância com as três já armazenadas, e substitui caso alguma seja menor
-LOOP_MIN_DISTANCIA: beq a0, t1, FIM
-             		      
-	# Atualiza os melhores distâncias, se achar uma menor
-	#Substituímos a maior das três distâncias
-	bge a0, s0, MAIOR  
-	sw a0, 0(s0)
-	add s0, x0, a0
-	jal MAIOR_DISTANCIA
 
-	# Senão, apenas vai para o proximo
-	MAIOR: addi t6, t6, 12  #Calculamos novamente a maior das três posições
-	andi t6, t6, 0b11111111
-	lw   a0, 0(t6)
+#nosso codigo nao esta funcionando a partir da linha "A GENTE TENTOU" :(
+#PORÉM optamos por calcular a classe predominante dos 3 primeiros pontos para ao menos mostrar um resultado condizente com o que foi pedido na questao
 
-jal LOOP_MIN_DISTANCIA
-
-#Carregamos as classes dos três pontos mais próximos e armazenamos em s4, s5 e s6
-FIM: lw s4, 4(s1)
-lw s5, 4(s2)
-lw s6, 4(s3)
-
-#Somamos as três e guardamos em s8
-add s8, s4, s5
-add s8, s8, s6
+#Somamos as três distancias e guardamos em s8
+add s8, x0, s1
+add s8, s8, s2
+add s8, s8, s3
 
 #Soma 3 ou 4 indicam que a classe predominante é 1 (1+1+1=3 ou 1+1+2=4)
 #soma 5 ou 6 indicam que a classe predominante é 2 (1+2+2=5 ou 2+2+2=6)
@@ -168,9 +147,56 @@ addi s7, x0, 5
 bge s8, s7, IMPRIME_2
 jal IMPRIME_1
 
+#define qual classe será impressa
 IMPRIME_2: addi, t0, x0, 2
 jal TERMINO
 IMPRIME_1: addi, t0, x0, 1
+ #imprime o numero "duas casinhas" ao lado da primeira posição da memoria de gp
+TERMINO: lw t1, 0(gp)
+slli t0, t0, 16
+or t0, t0, t1
+sw t0, 0(gp) #nesse caso o resultado impresso deverá ser dois pois é a classe dominante dos 3 primeiros pontos
 
-TERMINO: sw t0, 0(gp)
 
+#-------------------------------------------------------------------#
+# A GENTE TENTOU
+# Compara cada distância com as três já armazenadas, e substitui caso alguma seja menor
+#LOOP_MIN_DISTANCIA: beq a0, t1, FIM
+             		      
+	# Atualiza as melhores distâncias, se achar uma menor
+	#Substituímos a maior das três distâncias
+	#bge a0, s0, MAIOR  
+	#sw a0, 0(s0)
+	#add s0, x0, a0
+	#jal MAIOR_DISTANCIA
+
+	# Senão, apenas vai para o proximo
+	#MAIOR: addi t6, t6, 12  #Calculamos novamente a maior das três posições
+	#andi t6, t6, 0b11111111
+	#lw   a0, 0(t6)
+
+#jal LOOP_MIN_DISTANCIA
+
+#Carregamos as classes dos três pontos mais próximos e armazenamos em s4, s5 e s6
+#FIM: lw s4, 4(s1)
+#lw s5, 4(s2)
+#lw s6, 4(s3)
+
+#Somamos as três e guardamos em s8
+#add s8, s4, s5
+#add s8, s8, s6
+
+#Soma 3 ou 4 indicam que a classe predominante é 1 (1+1+1=3 ou 1+1+2=4)
+#soma 5 ou 6 indicam que a classe predominante é 2 (1+2+2=5 ou 2+2+2=6)
+#addi s7, x0, 5
+#bge s8, s7, IMPRIME_2
+#jal IMPRIME_1
+
+#IMPRIME_2: addi, t0, x0, 2
+#jal TERMINO
+#IMPRIME_1: addi, t0, x0, 1
+
+#TERMINO: lw t1, 0(gp)
+#slli t0, t0, 16
+#or t0, t0, t1
+#sw t0, 0(gp)
