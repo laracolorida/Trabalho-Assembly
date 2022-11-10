@@ -19,8 +19,24 @@ Atualize t6 para a posição de memória t6+12, que é onde está a próxima dis
 Carregue o valor armazenado na posição apontada por t6 em a0;
 
 Enquanto a distância armazenada na posição apontada por a0 != t1 faça:
-  Se a distância armazenada em a0 for menor que a armazenada em s0:
+  Se a distância armazenada em a0 for menor que a armazenada em s0 então:
     Atualize o valor de s0 para a0;
     Volte para a linha 17;
+  Senão:
+    Atualize t6 para t6+12;
+    Carregue o valor armazenado na posição apontada por t6 em a0;
+   Fim do Se;
 Fim do Enquanto;
 
+Carregue o valor das classes dos três pontos mais próximos apontados por s1. s2 e s3 para s4, s5 e s6 respectivamente;
+Soma o valor de s4, s5 e s6 e armazene em s8;
+Armazene o imediato 5 em s7;
+
+Se s8 >= s7 então: //Isso indica que a classe predominante é 2 (1+2+2=5 ou 2+2+2=6) 
+  Grave 2 na posição de memória apontada por gp+0;
+  Vá para o Fim do Programa;
+Senão:
+  Grave 1 na posição de memória apontada por gp+0;
+Fim do Se;
+
+Fim do Programa;
