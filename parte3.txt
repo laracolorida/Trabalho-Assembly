@@ -1,4 +1,4 @@
-#Gravando os valores do vetor na memória
+#Gravando os valores do vetor em sequência na memória
 addi t0, x0, 3
 sw t0, 0(gp)
 addi t0, x0, 2
@@ -52,117 +52,124 @@ sw t0, 96(gp)
 addi t0, x0, -1
 sw t0, 100(gp) # Adiciona mais uma linha de -1 após as distancias que serao registradas
 
-#calculando distancia
-add  t6, x0, gp   # Posição inicial dos valores
+#A partir daqui começaremos a parte de cálculo das distâncias entre os pontos
+add  t6, x0, gp   # Posição inicial do vetor
              
-addi t6, t6, 4 # X do ponto dado na questao
+addi t6, t6, 4 # Coordenada X do ponto dado
 lw a0, 0(t6)
              
-addi t6, t6, 4 # Y do ponto dado na questao
+addi t6, t6, 4 # Coordenada Y do ponto dado
 lw a1, 0(t6)
              
-#Ponteiro para os pontos a serem analisados
+#Ponteiros que vão percorrer os pontos a serem analisados
 addi t6, t6, 4
-lw a2, 0(t6) # X
+lw a2, 0(t6) # Coordena X
 addi t6, t6, 4
-lw a3, 0(t6) # Y
+lw a3, 0(t6) # Coordenada Y
                     
-# Enquanto o X daquele ponto nao for -1, calcula a distância e vai pro próximo ponto. 
+# Calculamos a distância de todos os pontos ao ponto em questão enquanto a coordenada X é diferente de -1
 addi t1, x0, -1
 
 LOOP: beq a2, t1, END_LOOP
-add a4, x0, a0
-add a5, x0, a1
-                        
-# DISTANCIA DE MANHATTAN
-                        # Calcula as diferenças de x e y
-                        sub a4, a4, a2
-                        sub a5, a5, a3
+	add a4, x0, a0
+	add a5, x0, a1
 
-                        blt a4, x0, MUL_X
-                        jal CHECK_Y
-                        MUL_X: mul a4, a4, t1
-                        CHECK_Y: blt a5, x0, MUL_Y
-                        jal SOMA
-                        MUL_Y: mul a5, a5, t1
-                        
-                        # Soma as coordenadas
-                        SOMA: add a4, a4, a5
-                        
-                        # Salva a diferença ao lado do Y
-						add t3, x0, a4
-                        slli t3, t3, 8
-                        or t3, t3, a3
-                        sw t3, 0(t6)
-                        
-                        # Carrega os próximos pontos
-						addi t6, t6, 8
-                        
-             			lw   a2, 0(t6)   # X
-             			addi t6, t6, 4
-             			lw   a3, 0(t6)   # Y
-                          
-                        jal LOOP
-                        
-                        
+	# Usaremos a distância de Manhattan
+	# Calculamos as diferenças de x e y
+	sub a4, a4, a2
+	sub a5, a5, a3
+	
+	#Garantimos que o valor seja positivo multiplicando os negativos por -1
+	blt a4, x0, MUL_X
+	jal CHECK_Y
+	MUL_X: mul a4, a4, t1
+	CHECK_Y: blt a5, x0, MUL_Y
+	jal SOMA
+	MUL_Y: mul a5, a5, t1
+
+	# Somando as distâncias encontrados
+	SOMA: add a4, a4, a5
+
+	# Vamos salva a distância encontrada ao lado da coordenada Y na memória
+	add t3, x0, a4
+	slli t3, t3, 8
+	or t3, t3, a3
+	sw t3, 0(t6)
+
+	# Lemos as coordenados do próxmo ponto na memória
+	addi t6, t6, 8
+	lw   a2, 0(t6)  #Coordenada X
+	addi t6, t6, 4
+	lw   a3, 0(t6)  #Coordenada Y
+
+jal LOOP                      
+   
+#Agora vamos procurar as 3 menos distância encontradas, ou seja, as distâncias dos pontos mais próximos
 END_LOOP: add  t6, x0, gp   # Início do array de pontos
 
-			 addi t6, t6, 16    # Aponta para a primeira distancia
-             andi t6, t6, 0b11111111
-             add s1, x0, t6
-             addi t6, t6, 28    # Aponta para a segunda distancia
-             andi t6, t6, 0b11111111
-             add s2, x0, t6
-             addi t6, t6, 40    # Aponta para a terceira distancia (conferir)
-             andi t6, t6, 0b11111111
-             add s3, x0, t6
+#Inicialmente, carregamos as distências dos três primeiros pontos da memória
+addi t6, t6, 16    # Aponta para a primeira distancia
+andi t6, t6, 0b11111111
+add s1, x0, t6
+addi t6, t6, 28    # Aponta para a segunda distancia
+andi t6, t6, 0b11111111
+add s2, x0, t6
+addi t6, t6, 40    # Aponta para a terceira distancia (conferir)
+andi t6, t6, 0b11111111
+add s3, x0, t6
+
+#Vamos calcular e armazenar em s0 qual é a maior das três distãncias que colocamos em s1, s2 e s3 
+MAIOR_DISTANCIA:
+add s0, x0, t6 #maior distancia das menores
+bge s1, s2, ELSE1
+bge s1, s3, S2_MAIOR
+bge s2, s3, S2_MAIOR
+add s0, x0, s3
+jal FINAL
+ELSE1: bge s1, s3, S1_MAIOR
+jal FINAL
+S2_MAIOR: add s0, x0, s2
+jal FINAL
+S1_MAIOR: add s0, x0, s1
+
+FINAL: addi t6, t6, 12 # Vai para a proxima distancia
+lw a0, 0(t6)
              
-             MAIOR_DISTANCIA:
-             add s0, x0, t6 #maior distancia das menores
-             bge s1, s2, ELSE1
-             bge s1, s3, S2_MAIOR
-             bge s2, s3, S2_MAIOR
-             add s0, x0, s3
-             jal FINAL
-             ELSE1: bge s1, s3, S1_MAIOR
-             jal FINAL
-             S2_MAIOR: add s0, x0, s2
-             jal FINAL
-             S1_MAIOR: add s0, x0, s1
-             
-             FINAL: addi t6, t6, 12 # Vai para a proxima distancia
-             lw a0, 0(t6)
-             
-             # Encontra a menor distância.
-             LOOP_MIN_DISTANCIA: beq a0, t1, FIM
+# Compara cada distância com as três já armazenadas, e substitui caso alguma seja menor
+LOOP_MIN_DISTANCIA: beq a0, t1, FIM
              		      
-                          	 # Atualiza os melhores, se achar um menor
-                          	 bge a0, s0, MAIOR  
-                             	 sw a0, 0(s0)
-                                 add s0, x0, a0
-                                 jal MAIOR_DISTANCIA
-             		     
-                         	# Senao, so vai pro proximo
-             		         MAIOR: addi t6, t6, 12  # Vai pra proximo posicao das distancias
-                                    andi t6, t6, 0b11111111
-                             lw   a0, 0(t6)
-                             
-             		         jal LOOP_MIN_DISTANCIA
-             
-            FIM: lw s3, 4(s1)
-            lw s4, 4(s2)
-            lw s5, 4(s3)
-            
-            add s8, s3, s4
-            add s8, s8, s5
-            
-            
-            bge s8, s6, IMPRIME_2
-            jal IMPRIME_1
-            
-            IMPRIME_2: addi, gp, x0, 2
-            jal TERMINO
-            IMPRIME_1: addi, gp, x0, 1
-            
-            TERMINO:
+	# Atualiza os melhores distâncias, se achar uma menor
+	#Substituímos a maior das três distâncias
+	bge a0, s0, MAIOR  
+	sw a0, 0(s0)
+	add s0, x0, a0
+	jal MAIOR_DISTANCIA
+
+	# Senão, apenas vai para o proximo
+	MAIOR: addi t6, t6, 12  #Calculamos novamente a maior das três posições
+	andi t6, t6, 0b11111111
+	lw   a0, 0(t6)
+
+jal LOOP_MIN_DISTANCIA
+
+#Carregamos as classes dos três pontos mais próximos e armazenamos em s3, s4 e s5
+FIM: lw s3, 4(s1)
+lw s4, 4(s2)
+lw s5, 4(s3)
+
+#Somamos as três e guardamos em s8
+add s8, s3, s4
+add s8, s8, s5
+
+#Soma 3 ou 4 indicam que a classe predominante é 1 (1+1+1 ou 1+1+2)
+#soma 5 ou 6 indicam que a classe predominante é 2 (1+2+2 ou 2+2+2)
+addi s6, x0, 5
+bge s8, s6, IMPRIME_2
+jal IMPRIME_1
+
+IMPRIME_2: addi, gp, x0, 2
+jal TERMINO
+IMPRIME_1: addi, gp, x0, 1
+
+TERMINO:
 
