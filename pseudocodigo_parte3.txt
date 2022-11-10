@@ -1,1 +1,11 @@
-
+Para cada valor x do vetor Memoria = {3, 2,1,  0, 0, 1  , 0, 1, 2 ,   1,0, 1 ,  2,0,1,  3,0,1,   0,2, 2,  0,3, 2  -1} faça:
+  Grave x na posição de memória apontada por gp+cont, onde cont é inicializado com 0 e é incrementado de 4 em 4;
+ 
+Armazenamos em dois registradores a0 e a1 as coordenadas x e y do primeiro ponto do vetor;
+Armazenamos -1 do registrador t1;
+Declaramos a2 como um ponteiro para percorrer a coordenada x;
+Declaramos a3 como um ponteiro para percorrer a coordenada y;
+Enquanto Memoria[i] != t1 faça:
+  Calcule a distância de Manhattan entre os ponto de cordenadas armazenadas em a0 e a1 e em a2 e a3 e armazene o resultado em a4;
+  Salve a distância na memória ao lado da coordenada y armazenada em a3;
+  
