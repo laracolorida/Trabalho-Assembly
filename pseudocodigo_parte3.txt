@@ -17,14 +17,14 @@ Enquanto Memoria[i] != t1 faça:
 Fim do Enquanto;
 
 Carregue as distâncias do três primeiros pontos após o primeiro nos registradores s1, s2 e s3;
-Calcule a menor das três distâncias e armazene-a em s0;
+Calcule a maior das três distâncias e armazene-a em s0;
 Atualize t6 para a posição de memória t6+12, que é onde está a próxima distância;
 Carregue o valor armazenado na posição apontada por t6 para a0;
 
 Enquanto a distância armazenada na posição apontada por a0 != t1 faça:
   Se a distância armazenada em a0 for menor que a armazenada em s0 então:
-    Atualize o valor de s0 para a0;
-    Volte para a linha 17;
+    Atualize o valor de s0 para o de a0;
+    Volte para a linha que calcula a maior das 3 distâncias;
   Senão:
     Atualize t6 para t6+12;
     Carregue o valor armazenado na posição apontada por t6 para a0;
