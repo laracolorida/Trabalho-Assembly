@@ -1,5 +1,10 @@
 # Trabalho em Assembly
-Realizado na disciplina de Organização de Computadores, ministrada pelo professor Ricardo Ferreira 
+Realizado na disciplina de Organização de Computadores, ministrada pelo professor Ricardo Ferreira
+Ana Laura Tavares
+Barbara Cristina Fonseca
+Gabriela Ouriques
+Lara Fernandes Pereira
+Maria Victoria Fernandes Vaz
 <br><br>
 
 #### 1. Fazer a multiplicação de float 7 bits
